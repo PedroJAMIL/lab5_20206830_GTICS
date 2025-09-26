@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: header('Mensajes recibidos')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('mensajes')}"></nav>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Mensajes recibidos</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Selección de usuario -->
+                        <form method="get" th:action="@{/mensajes}" class="mb-4">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-auto">
+                                    <label for="usuarioId" class="form-label">Selecciona usuario:</label>
+                                </div>
+                                <div class="col-auto">
+                                    <select name="usuarioId" id="usuarioId" class="form-select">
+                                        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre + ' ' + u.apellido}" th:selected="${usuarioSeleccionado != null} ? ${u.id} == ${usuarioSeleccionado.id} : false"></option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary">Ver mensajes</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Total de mensajes -->
+                        <div class="mb-3">
+                            <h5>Cantidad total de mensajes: <span th:text="${totalMensajes}"></span></h5>
+                        </div>
+                        <!-- Mensajes -->
+                        <div th:if="${mensajes != null and #lists.size(mensajes) > 0}">
+                            <div th:each="mensaje : ${mensajes}" class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-subtitle mb-2 text-muted">De: <span th:text="${mensaje.remitente.nombre + ' ' + mensaje.remitente.apellido}"></span></h6>
+                                    <p class="mb-1">Regalo: <span th:text="${mensaje.regaloTipo}"></span>
+                                        <span th:if="${mensaje.regaloTipo == 'carrito'}">- Color: <span th:text="${mensaje.regaloColor}"></span></span>
+                                        <span th:if="${mensaje.regaloTipo == 'flor'}">- Color: amarillo</span>
+                                    </p>
+                                    <p class="mb-1">Contenido: <span th:text="${mensaje.contenido}"></span></p>
+                                    <p class="mb-0"><small th:text="${#dates.format(mensaje.fechaEnvio, 'dd/MM/yyyy HH:mm')}"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:if="${mensajes == null or #lists.size(mensajes) == 0}" class="alert alert-info">No hay mensajes para mostrar.</div>
+                        <!-- Mensaje de error -->
+                        <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:replace="~{fragments/navbar :: footer-bootstrap}"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: header('Lista de Usuarios')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('usuarios')}"></nav>
+    
+    <div class="container mt-4">
+        <!-- Titulo principal -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="display-4 text-primary">Bienvenido a Flores Amarillas</h1>
+                <p class="lead">Conecta con otros usuarios y envia mensajes especiales</p>
+            </div>
+        </div>
+
+        <!-- Boton para enviar mensajes -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <a href="/mensajes/enviar" class="btn btn-warning btn-lg">
+                    Enviar Mensaje
+                </a>
+            </div>
+        </div>
+
+        <!-- Lista de usuarios -->
+        <div class="row">
+            <div class="col-12">
+                <h2 class="mb-4">Usuarios Registrados</h2>
+            </div>
+        </div>
+
+        <div class="row" th:if="${usuarios != null and !usuarios.empty}">
+            <div class="col-md-4 mb-4" th:each="usuario : ${usuarios}">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0" th:text="${usuario.nombre + ' ' + usuario.apellido}">
+                            Nombre Usuario
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>Correo:</strong><br>
+                            <span th:text="${usuario.correo}" class="text-muted">correo@ejemplo.com</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>Edad:</strong>
+                            <span th:text="${usuario.edad}">25</span> anos
+                        </p>
+                        <p class="card-text">
+                            <strong>Descripcion:</strong><br>
+                            <span th:text="${usuario.descripcion}" class="text-muted">Descripcion del usuario</span>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-light">
+                        <small class="text-muted">
+                            Usuario ID: <span th:text="${usuario.id}">1</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje si no hay usuarios -->
+        <div class="row" th:if="${usuarios == null or usuarios.empty}">
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    <h4 class="alert-heading">No hay usuarios registrados!</h4>
+                    <p>Parece que aun no hay usuarios en la base de datos. Asegurate de que la base de datos este configurada correctamente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:replace="~{fragments/navbar :: footer-bootstrap}"></script>
+</body>
+</html>

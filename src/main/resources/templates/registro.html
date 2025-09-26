@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: header('Registro de Usuario')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('registro')}"></nav>
+    
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Registro de Usuario</h3>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- Mensaje de exito -->
+                        <div th:if="${mensaje}" class="alert alert-success alert-dismissible fade show" role="alert">
+                            <span th:text="${mensaje}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        
+                        <!-- Mensaje de error -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span th:text="${error}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        
+                        <form th:action="@{/registro}" th:object="${usuario}" method="post">
+                            
+                            <!-- Nombre -->
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre *</label>
+                                <input type="text" class="form-control" th:field="*{nombre}" 
+                                       th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid' : ''"
+                                       placeholder="Ingresa tu nombre">
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('nombre')}" th:text="${error}"></div>
+                            </div>
+                            
+                            <!-- Apellido -->
+                            <div class="mb-3">
+                                <label for="apellido" class="form-label">Apellido *</label>
+                                <input type="text" class="form-control" th:field="*{apellido}"
+                                       th:classappend="${#fields.hasErrors('apellido')} ? 'is-invalid' : ''"
+                                       placeholder="Ingresa tu apellido">
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('apellido')}" th:text="${error}"></div>
+                            </div>
+                            
+                            <!-- Correo -->
+                            <div class="mb-3">
+                                <label for="correo" class="form-label">Correo Electronico *</label>
+                                <input type="email" class="form-control" th:field="*{correo}"
+                                       th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid' : ''"
+                                       placeholder="ejemplo@correo.com">
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('correo')}" th:text="${error}"></div>
+                            </div>
+                            
+                            <!-- Edad -->
+                            <div class="mb-3">
+                                <label for="edad" class="form-label">Edad *</label>
+                                <input type="number" class="form-control" th:field="*{edad}" min="18" max="120"
+                                       th:classappend="${#fields.hasErrors('edad')} ? 'is-invalid' : ''"
+                                       placeholder="Ingresa tu edad">
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('edad')}" th:text="${error}"></div>
+                                <div class="form-text">Edad minima: 18 años</div>
+                            </div>
+                            
+                            <!-- Descripcion -->
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripcion *</label>
+                                <textarea class="form-control" th:field="*{descripcion}" rows="3"
+                                          th:classappend="${#fields.hasErrors('descripcion')} ? 'is-invalid' : ''"
+                                          placeholder="Cuentanos un poco sobre ti (minimo 10 caracteres)"></textarea>
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('descripcion')}" th:text="${error}"></div>
+                                <div class="form-text">Minimo 10 caracteres</div>
+                            </div>
+                            
+                            <!-- Contrasena -->
+                            <div class="mb-3">
+                                <label for="contrasena" class="form-label">Contrasena *</label>
+                                <input type="password" class="form-control" th:field="*{contrasena}"
+                                       th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid' : ''"
+                                       placeholder="Ingresa tu contrasena">
+                                <div class="invalid-feedback" th:each="error : ${#fields.errors('contrasena')}" th:text="${error}"></div>
+                                <div class="form-text">Al menos 6 caracteres y debe contener al menos 1 numero</div>
+                            </div>
+                            
+                            <!-- Botones -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/" class="btn btn-secondary me-md-2">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Registrarse</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:replace="~{fragments/navbar :: footer-bootstrap}"></script>
+</body>
+</html>
