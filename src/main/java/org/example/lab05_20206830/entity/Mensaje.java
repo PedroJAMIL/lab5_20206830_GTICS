@@ -1,38 +1,79 @@
 package org.example.lab05_20206830.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "mensajes")
+@Getter
+@Setter
 public class Mensaje {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
-    @NotBlank
-    @Column(name = "remitente_id",nullable = false)
-    private int remitente_id;
+    @ManyToOne
+    @JoinColumn(name = "remitente_id", nullable = false)
+    private Usuario remitente;
 
-    @NotBlank
-    @Column(name = "destinatario_id",nullable = false)
-    private int destinatario_id;
+    @ManyToOne
+    @JoinColumn(name = "destinatario_id", nullable = false)
+    private Usuario destinatario;
 
-    @NotBlank
-    @Column(name = "regalo_tipo",nullable = false)
-    private boolean regalo_tipo;
+    @NotBlank(message = "Debe seleccionar un tipo de regalo")
+    @Column(name = "regalo_tipo", nullable = false)
+    private String regaloTipo; // "flor" o "carrito"
 
-    @NotBlank
-    @Column(name = "regalo_color",nullable = false)
-    private String regalo_color;
+    @Column(name = "regalo_color")
+    private String regaloColor;
 
-    @NotBlank
-    @Column(name = "contenido",nullable = false)
+    @NotBlank(message = "El mensaje no puede estar vacío")
+    @Size(min = 20, message = "El mensaje debe tener al menos 20 caracteres")
+    @Pattern(regexp = "^(?!.*(odio|feo)).*$", 
+             message = "El mensaje no debe contener las palabras 'odio' ni 'feo'",
+             flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Column(name = "contenido", nullable = false, columnDefinition = "TEXT")
     private String contenido;
 
-    @NotBlank
-    @Column(name = "fecha_envio",nullable = false)
-    private String fecha_envio;
+    @Column(name = "fecha_envio", nullable = false)
+    private LocalDateTime fechaEnvio = LocalDateTime.now();
+
+    // Constructor vacío
+    public Mensaje() {}
+
+    // Constructor con parámetros
+    public Mensaje(Usuario remitente, Usuario destinatario, String regaloTipo, 
+                   String regaloColor, String contenido) {
+        this.remitente = remitente;
+        this.destinatario = destinatario;
+        this.regaloTipo = regaloTipo;
+        this.regaloColor = regaloColor;
+        this.contenido = contenido;
+        this.fechaEnvio = LocalDateTime.now();
+    }
+
+    public void setRemitente(Usuario remitente) {
+        this.remitente = remitente;
+    }
+
+    public void setDestinatario(Usuario destinatario) {
+        this.destinatario = destinatario;
+    }
+
+    public void setRegaloTipo(String regaloTipo) {
+        this.regaloTipo = regaloTipo;
+    }
+
+    public void setRegaloColor(String regaloColor) {
+        this.regaloColor = regaloColor;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
 }

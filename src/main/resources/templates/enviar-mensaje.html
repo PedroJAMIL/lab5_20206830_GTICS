@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/navbar :: header('Enviar Mensaje')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('enviar-mensaje')}"></nav>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">Enviar Mensaje Motivacional</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Mensaje de error -->
+                        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <span th:text="${error}"></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        <form th:action="@{/enviar-mensaje}" th:object="${mensaje}" method="post">
+                            <!-- Remitente -->
+                            <div class="mb-3">
+                                <label for="remitenteId" class="form-label">Remitente</label>
+                                <select class="form-select" name="remitenteId" id="remitenteId" required>
+                                    <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre + ' ' + u.apellido}"></option>
+                                </select>
+                            </div>
+                            <!-- Destinatario -->
+                            <div class="mb-3">
+                                <label for="destinatarioId" class="form-label">Destinatario</label>
+                                <select class="form-select" name="destinatarioId" id="destinatarioId" required>
+                                    <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre + ' ' + u.apellido}" th:selected="${destinatarioSeleccionado != null} ? ${u.id} == ${destinatarioSeleccionado.id} : false"></option>
+                                </select>
+                            </div>
+                            <!-- Tipo de regalo -->
+                            <div class="mb-3">
+                                <label for="regaloTipo" class="form-label">Tipo de regalo</label>
+                                <select class="form-select" name="regaloTipo" id="regaloTipo" required>
+                                    <option value="flor">Flor amarilla</option>
+                                    <option value="carrito">Carrito</option>
+                                </select>
+                            </div>
+                            <!-- Color del regalo (solo para carrito) -->
+                            <div class="mb-3" id="colorCarritoDiv">
+                                <label for="regaloColor" class="form-label">Color del carrito</label>
+                                <select class="form-select" name="regaloColor" id="regaloColor">
+                                    <option value="rojo">Rojo</option>
+                                    <option value="azul">Azul</option>
+                                    <option value="verde">Verde</option>
+                                </select>
+                                <div class="form-text">Solo aplica si el regalo es carrito.</div>
+                            </div>
+                            <!-- Contenido del mensaje -->
+                            <div class="mb-3">
+                                <label for="contenido" class="form-label">Mensaje</label>
+                                <textarea class="form-control" name="contenido" id="contenido" rows="3" required placeholder="Escribe tu mensaje motivacional..."></textarea>
+                                <div class="form-text">Mínimo 20 caracteres. No debe contener 'odio' ni 'feo'.</div>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a href="/" class="btn btn-secondary me-md-2">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:replace="~{fragments/navbar :: footer-bootstrap}"></script>
+    <script>
+        // Mostrar/ocultar color del carrito según tipo de regalo
+        document.addEventListener('DOMContentLoaded', function() {
+            var regaloTipo = document.getElementById('regaloTipo');
+            var colorCarritoDiv = document.getElementById('colorCarritoDiv');
+            function toggleColorCarrito() {
+                if (regaloTipo.value === 'carrito') {
+                    colorCarritoDiv.style.display = 'block';
+                } else {
+                    colorCarritoDiv.style.display = 'none';
+                }
+            }
+            regaloTipo.addEventListener('change', toggleColorCarrito);
+            toggleColorCarrito();
+        });
+    </script>
+</body>
+</html>
