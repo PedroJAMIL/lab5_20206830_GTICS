@@ -19,7 +19,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <select name="usuarioId" id="usuarioId" class="form-select">
-                                        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre + ' ' + u.apellido}" th:selected="${usuarioSeleccionado != null} ? ${u.id} == ${usuarioSeleccionado.id} : false"></option>
+                                        <option th:each="u : ${usuarios}" th:value="${u.id}" th:text="${u.nombre + ' ' + u.apellido}" th:selected="${usuarioSeleccionado != null and u.id == usuarioSeleccionado.id}"></option>
                                     </select>
                                 </div>
                                 <div class="col-auto">
@@ -35,13 +35,13 @@
                         <div th:if="${mensajes != null and #lists.size(mensajes) > 0}">
                             <div th:each="mensaje : ${mensajes}" class="card mb-3">
                                 <div class="card-body">
-                                    <h6 class="card-subtitle mb-2 text-muted">De: <span th:text="${mensaje.remitente.nombre + ' ' + mensaje.remitente.apellido}"></span></h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">De: <span th:text="${mensaje.remitente != null ? mensaje.remitente.nombre + ' ' + mensaje.remitente.apellido : 'Desconocido'}"></span></h6>
                                     <p class="mb-1">Regalo: <span th:text="${mensaje.regaloTipo}"></span>
                                         <span th:if="${mensaje.regaloTipo == 'carrito'}">- Color: <span th:text="${mensaje.regaloColor}"></span></span>
                                         <span th:if="${mensaje.regaloTipo == 'flor'}">- Color: amarillo</span>
                                     </p>
                                     <p class="mb-1">Contenido: <span th:text="${mensaje.contenido}"></span></p>
-                                    <p class="mb-0"><small th:text="${#dates.format(mensaje.fechaEnvio, 'dd/MM/yyyy HH:mm')}"></small></p>
+                                                                                                            <!-- Fecha eliminada para evitar errores -->
                                 </div>
                             </div>
                         </div>

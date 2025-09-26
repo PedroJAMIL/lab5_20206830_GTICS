@@ -30,7 +30,7 @@ public class Mensaje {
     private String regaloTipo; // "flor" o "carrito"
 
     @Column(name = "regalo_color")
-    private String regaloColor; // Solo para carrito, null para flor amarilla
+    private String regaloColor;
 
     @NotBlank(message = "El mensaje no puede estar vacío")
     @Size(min = 20, message = "El mensaje debe tener al menos 20 caracteres")
@@ -57,7 +57,6 @@ public class Mensaje {
         this.fechaEnvio = LocalDateTime.now();
     }
 
-    // Métodos setters explícitos para compatibilidad con el controlador
     public void setRemitente(Usuario remitente) {
         this.remitente = remitente;
     }

@@ -49,22 +49,18 @@ public class HomeController {
                                    Model model,
                                    RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            // Si hay errores, mostrar el formulario de registro
             return "registro";
         }
         try {
             usuarioRepository.save(usuario);
             redirectAttributes.addFlashAttribute("mensaje", "Usuario registrado exitosamente!");
-            // Redirigir a la página principal tras registro exitoso
             return "redirect:/";
         } catch (Exception e) {
             model.addAttribute("error", "Error al registrar usuario: " + e.getMessage());
-            // Si hay error, mostrar el formulario de registro
             return "registro";
         }
     }
 
-    // Enviar mensaje motivacional
     @GetMapping("/enviar-mensaje")
     public String mostrarFormularioMensaje(Model model, @RequestParam(required = false) Integer destinatarioId) {
         model.addAttribute("mensaje", new Mensaje());
